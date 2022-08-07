@@ -2,6 +2,7 @@ package util
 
 import (
 	"fmt"
+
 	"github.com/bwmarrin/snowflake"
 )
 
@@ -45,4 +46,9 @@ func GetUnitId() string {
 // GetAccountId 账号
 func GetAccountId() string {
 	return getId("AC")
+}
+
+// GetStoreId 账号
+func GetStoreId() string {
+	return getId("STO")
 }

@@ -2,6 +2,8 @@ package util
 
 import (
 	"math"
+	"strconv"
+	"strings"
 )
 
 //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -59,4 +61,26 @@ func Distance(lat1 float64, lng1 float64, lat2 float64, lng2 float64, unit ...st
 	}
 
 	return dist
+}
+
+func parserPosition(pos string) (float64, float64) {
+	xy := strings.Split(pos, ",")
+	if len(xy) != 2 {
+		panic("pos is invalid, should be `12.34,45.67`")
+	}
+	x, err := strconv.ParseFloat(xy[0], 64)
+	if err != nil {
+		panic("x is invalid, should be a float string")
+	}
+	y, err := strconv.ParseFloat(xy[1], 64)
+	if err != nil {
+		panic("y is invalid, should be a float string")
+	}
+	return x, y
+}
+
+func DistancePosition(a, b string) float64 {
+	ax, ay := parserPosition(a)
+	bx, by := parserPosition(b)
+	return Distance(ax, ay, bx, by, "K")
 }

@@ -39,6 +39,8 @@ type Config struct {
 	SignKey string
 	// amqp地址
 	MQConf string
+	// ES 地址
+	ESConf string
 }
 
 // ConfInstance xx

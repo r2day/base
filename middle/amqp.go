@@ -46,14 +46,14 @@ func InitAMQP(address string) Amqp {
 
 }
 
-func (i Amqp)Send(payload []byte) {
+func (i Amqp) Send(payload []byte) {
 
 	body := "Hello World!"
 	err := i.Channel.Publish(
-		"",     // exchange
+		"",           // exchange
 		i.Queue.Name, // routing key
-		false,  // mandatory
-		false,  // immediate
+		false,        // mandatory
+		false,        // immediate
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        payload,

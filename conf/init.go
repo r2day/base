@@ -37,6 +37,8 @@ type Config struct {
 	DataDSN     string
 	// 请求参数签名 (配置在前端所在服务器上TODO)
 	SignKey string
+	// amqp地址
+	MQConf string
 }
 
 // ConfInstance xx

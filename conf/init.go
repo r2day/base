@@ -27,6 +27,7 @@ type WxConf struct {
 // Config 总配置
 type Config struct {
 	ServerName  string
+	ServerPort  string
 	RunMode     string
 	SecretKey   string
 	AllowOrigin string

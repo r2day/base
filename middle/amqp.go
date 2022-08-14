@@ -18,7 +18,7 @@ type Amqp struct {
 	Queue   amqp.Queue
 }
 
-func InitAMQP(address string) Amqp {
+func InitAMQP(address string, name string) Amqp {
 
 	var instance Amqp
 	conn, err := amqp.Dial(address)
@@ -30,7 +30,7 @@ func InitAMQP(address string) Amqp {
 	// defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		"hello", // name
+		name, // name
 		false,   // durable
 		false,   // delete when unused
 		false,   // exclusive
@@ -54,7 +54,6 @@ func (i Amqp) Close() {
 
 func (i Amqp) Send(payload []byte) {
 
-	body := "Hello World!"
 	err := i.Channel.Publish(
 		"",           // exchange
 		i.Queue.Name, // routing key
@@ -65,7 +64,6 @@ func (i Amqp) Send(payload []byte) {
 			Body:        payload,
 		})
 	failOnError(err, "Failed to publish a message")
-	logger.Logger.Infof(" [x] Sent %s\n", body)
 }
 
 func (i Amqp) Reiceive(f func([]byte) []byte) {
@@ -84,7 +82,7 @@ func (i Amqp) Reiceive(f func([]byte) []byte) {
 
 	go func() {
 		for d := range msgs {
-			logger.Logger.Infof("Received a message: %s", d.Body)
+			logger.Logger.Debugf("Received a message: %s", d.Body)
 			f(d.Body)
 		}
 	}()

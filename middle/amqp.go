@@ -23,11 +23,11 @@ func InitAMQP(address string) Amqp {
 	var instance Amqp
 	conn, err := amqp.Dial(address)
 	failOnError(err, "Failed to connect to RabbitMQ")
-	defer conn.Close()
+	// defer conn.Close()
 
 	ch, err := conn.Channel()
 	failOnError(err, "Failed to open a channel")
-	defer ch.Close()
+	// defer ch.Close()
 
 	q, err := ch.QueueDeclare(
 		"hello", // name
@@ -44,6 +44,12 @@ func InitAMQP(address string) Amqp {
 
 	return instance
 
+}
+
+// Close 关闭
+func (i Amqp) Close() {
+	i.Conn.Close()
+	i.Channel.Close()
 }
 
 func (i Amqp) Send(payload []byte) {

@@ -52,3 +52,18 @@ func GetAccountId() string {
 func GetStoreId() string {
 	return getId("STO")
 }
+
+// GetItemId 获取物品id
+func GetItemId() string {
+	return getId("RI")
+}
+
+// GetCartItemId 获取物品项目id
+func GetCartItemId() string {
+	return getId("RCI")
+}
+
+// GetCartItemId 获取购物车id
+func GetCartId() string {
+	return getId("RC")
+}

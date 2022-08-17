@@ -30,12 +30,12 @@ func InitAMQP(address string, name string) Amqp {
 	// defer ch.Close()
 
 	q, err := ch.QueueDeclare(
-		name, // name
-		false,   // durable
-		false,   // delete when unused
-		false,   // exclusive
-		false,   // no-wait
-		nil,     // arguments
+		name,  // name
+		false, // durable
+		false, // delete when unused
+		false, // exclusive
+		false, // no-wait
+		nil,   // arguments
 	)
 	failOnError(err, "Failed to declare a queue")
 	instance.Conn = conn

@@ -67,3 +67,13 @@ func GetCartItemId() string {
 func GetCartId() string {
 	return getId("RC")
 }
+
+// GetOrderItemId 获取购物车id
+func GetOrderItemId() string {
+	return getId("OI")
+}
+
+// GetOrderId 获取购物车id
+func GetOrderId() string {
+	return getId("HLJ")
+}

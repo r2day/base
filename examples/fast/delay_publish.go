@@ -4,6 +4,7 @@ import (
         "log"
         "os"
         "strings"
+        "time"
 
         amqp "github.com/rabbitmq/amqp091-go"
 )
@@ -23,24 +24,13 @@ func main() {
         failOnError(err, "Failed to open a channel")
         defer ch.Close()
 
-	// .exchangeDeclare("my-exchange", "x-delayed-message", true, false, args)
-        args := make(amqp.Table)
+	args := make(amqp.Table)
 	args["x-delayed-type"] = "direct"
-
-	err = ch.ExchangeDeclare(
-	  "my-delay-exchange", // name
-	  "x-delayed-message",      // type
-	  true,          // durable
-	  false,         // auto-deleted
-	  false,         // internal
-	  false,         // no-wait
-	  args,           // arguments
-	)
-        
-        failOnError(err, "Failed to declare a queue")
+	err = ch.ExchangeDeclare("delayed", "x-delayed-message", true, false, false, false, args)
+        failOnError(err, "Failed to open a exchange")
 
         q, err := ch.QueueDeclare(
-                "task_queue2", // name
+                "task_queue", // name
                 true,         // durable
                 false,        // delete when unused
                 false,        // exclusive
@@ -49,17 +39,21 @@ func main() {
         )
         failOnError(err, "Failed to declare a queue")
 
+	ch.QueueBind(q.Name, "", "delayed", false, nil)
+	headers := make(amqp.Table) 
+	headers["x-delay"] = 5
         body := bodyFrom(os.Args)
         err = ch.Publish(
-                "my-delay-exchange",           // exchange
+                "delayed",           // exchange
                 q.Name,       // routing key
                 false,        // mandatory
                 false,
                 amqp.Publishing{
                         DeliveryMode: amqp.Persistent,
+			Timestamp:    time.Now(),
                         ContentType:  "text/plain",
                         Body:         []byte(body),
-                        Headers:     amqp.Table{"x-delay": 500},
+                        Headers: headers,
                 })
         failOnError(err, "Failed to publish a message")
         log.Printf(" [x] Sent %s", body)

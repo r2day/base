@@ -63,6 +63,7 @@ func InitConf(configPath string) *ConfT {
 			panic(err)
 		}
 	})
+	Conf.clientMap = make(map[string]*ClientT, 0)
 	Conf.initClientMap()
 	return Conf
 }

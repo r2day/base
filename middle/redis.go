@@ -9,6 +9,7 @@ import (
 	redis "github.com/go-redis/redis/v9"
 
 	btime "github.com/r2day/base/time"
+	"github.com/r2day/base/log"
 	"github.com/r2day/enum"
 )
 
@@ -48,7 +49,9 @@ func (rc *RedisClient) GetStoreQueueSeq(key string, prefix string, begin int) st
 	finalKey := fmt.Sprintf("%s_%s_%s_%s", enum.QueueSeq, btime.GetDaily(), key, prefix)
 	val, err := rc.Conn.Get(rc.Ctx, finalKey).Result()
 	if err != nil {
-		panic(err)
+		// panic(err)
+		log.Logger.Warn("no data for read")
+		log.Logger.WithField("finalyKey", finalKey).Info("but keep next")
 	}
 
 	// 未初始化
@@ -57,19 +60,23 @@ func (rc *RedisClient) GetStoreQueueSeq(key string, prefix string, begin int) st
 		// SET key value EX 10 NX
 		_, err = rc.Conn.SetEx(rc.Ctx, finalKey, newVal, dailyExpireTime).Result()
 		if err != nil {
-			panic(err)
+			// panic(err)
+			log.Logger.Error(err)
+			log.Logger.WithField("finalyKey", finalKey).Info("set key failed")
 		}
 		val = strconv.Itoa(newVal)
 	}
 
 	_, err = rc.Conn.Incr(rc.Ctx, finalKey).Result()
 	if err != nil {
-		panic(err)
+		log.Logger.Error(err)
+		log.Logger.WithField("finalyKey", finalKey).Info("set key failed")
 	}
 
 	_, err = rc.Conn.ExpireNX(rc.Ctx, finalKey, dailyExpireTime).Result()
 	if err != nil {
-		panic(err)
+		log.Logger.Error(err)
+		log.Logger.WithField("finalyKey", finalKey).Info("set key failed")
 	}
 
 	// SET key value EX 10 NX

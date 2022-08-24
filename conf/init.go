@@ -43,6 +43,7 @@ type Config struct {
 	ESConf string
 }
 
+
 // ConfInstance xx
 var ConfInstance = &Config{}
 

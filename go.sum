@@ -196,6 +196,8 @@ github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZN
 github.com/prometheus/client_model v0.0.0-20190812154241-14fe0d1b01d4/go.mod h1:xMI15A0UPsDsEKsMN9yxemIoYk6Tm2C1GtYGdfGttqA=
 github.com/r2day/enum v1.0.3 h1:dr7Lo1J/Rj2wFCFPLx2r0ByZoBZBtzAYjL/KUC4iFiU=
 github.com/r2day/enum v1.0.3/go.mod h1:eftSho9m88GGWGyw+Ob7djDcsmXmra2ZNFBh6ITXm5s=
+github.com/r2day/enum v1.0.5 h1:t4CZNDvhNKzOP6yAq2QGicmymrymCYftliJNIYHjEns=
+github.com/r2day/enum v1.0.5/go.mod h1:eftSho9m88GGWGyw+Ob7djDcsmXmra2ZNFBh6ITXm5s=
 github.com/rabbitmq/amqp091-go v1.4.0 h1:T2G+J9W9OY4p64Di23J6yH7tOkMocgnESvYeBjuG9cY=
 github.com/rabbitmq/amqp091-go v1.4.0/go.mod h1:JsV0ofX5f1nwOGafb8L5rBItt9GyhfQfcJj+oyz0dGg=
 github.com/rogpeppe/go-internal v1.3.0/go.mod h1:M8bDsm7K2OlrFYOpmOWEs/qY81heoFRclV5y23lUDJ4=

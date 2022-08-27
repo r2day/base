@@ -1,6 +1,7 @@
 package util
 
 import (
+	"fmt"
 	"math"
 	"strconv"
 	"strings"
@@ -83,4 +84,17 @@ func DistancePosition(a, b string) float64 {
 	ax, ay := parserPosition(a)
 	bx, by := parserPosition(b)
 	return Distance(ax, ay, bx, by, "K")
+}
+
+func DistanceShow(dis float64) string {
+	// print("dis-->", dis)
+	val2 := math.Dim(dis, 1)
+	val := ""
+	if val2 < 1 {
+		m := dis * 1000
+		val = fmt.Sprintf("%dm", int(m))
+	} else {
+		val = fmt.Sprintf("%.2fkm", dis)
+	}
+	return val
 }

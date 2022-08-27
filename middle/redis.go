@@ -8,8 +8,8 @@ import (
 
 	redis "github.com/go-redis/redis/v9"
 
-	btime "github.com/r2day/base/time"
 	"github.com/r2day/base/log"
+	btime "github.com/r2day/base/time"
 	"github.com/r2day/enum"
 )
 
@@ -84,4 +84,29 @@ func (rc *RedisClient) GetStoreQueueSeq(key string, prefix string, begin int) st
 	finalVal := fmt.Sprintf("%s%s", prefix, val)
 	return finalVal
 
+}
+
+// SetOrderPlace 下单后设置订单id缓存
+// 目的有两个
+// 1. 当支付的时候会去检查是否还存在值，如果已经过期无法获取到该key就不再允许支付
+// 2. 当过期后会监听事件(flow-consume会处理) 例如: 关单、回退库存
+func (rc *RedisClient) SetOrderPlace(ctx context.Context, orderId string) {
+
+	orderPlaceKey := fmt.Sprintf("%s_%s", enum.OrderPlaceTimeTTL, orderId)
+	minutes := btime.SecondsToMinutes(int(enum.DefaultOrderExpireTime.Seconds()))
+	rc.Conn.SetEx(ctx, orderPlaceKey, minutes, enum.DefaultOrderExpireTime)
+
+}
+
+// GetOrderPlace 检查订单是否还可以支付
+func (rc *RedisClient) GetOrderPlace(ctx context.Context, orderId string) string {
+
+	finalKey := fmt.Sprintf("%s_%s", enum.OrderPlaceTimeTTL, orderId)
+	val, err := rc.Conn.Get(rc.Ctx, finalKey).Result()
+	if err != nil {
+		log.Logger.Warn("no data for read")
+		log.Logger.WithField("finalyKey", finalKey).Info("but keep next")
+		return ""
+	}
+	return val
 }

@@ -110,3 +110,10 @@ func (rc *RedisClient) GetOrderPlace(ctx context.Context, orderId string) string
 	}
 	return val
 }
+
+// DelOrderPlace 当前订单已经支付完成，即可以删除该key
+// 避免重复支付
+func (rc *RedisClient) DelOrderPlace(ctx context.Context, orderId string) {
+	finalKey := fmt.Sprintf("%s_%s", enum.OrderPlaceTimeTTL, orderId)
+	rc.Conn.Del(rc.Ctx, finalKey)
+}

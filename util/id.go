@@ -77,3 +77,8 @@ func GetOrderItemId() string {
 func GetOrderId() string {
 	return getId("HLJ")
 }
+
+// TransactionId 交易id
+func TransactionId() string {
+	return getId("TX")
+}

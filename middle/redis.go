@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strconv"
 	"time"
+	"unsafe"
 
 	redis "github.com/go-redis/redis/v9"
 
@@ -19,9 +20,13 @@ const (
 	defaultDatabase = 0
 )
 
+type PSubscribeCallback func(pattern, channel, message string)
+
 type RedisClient struct {
-	Ctx  context.Context
-	Conn *redis.Client
+	Ctx        context.Context
+	Conn       *redis.Client
+	PSubClient redis.PubSub
+	cbMap      map[string]PSubscribeCallback
 }
 
 // InitRedis 初始化redis
@@ -116,4 +121,45 @@ func (rc *RedisClient) GetOrderPlace(ctx context.Context, orderId string) string
 func (rc *RedisClient) DelOrderPlace(ctx context.Context, orderId string) {
 	finalKey := fmt.Sprintf("%s_%s", enum.OrderPlaceTimeTTL, orderId)
 	rc.Conn.Del(rc.Ctx, finalKey)
+}
+
+func (rc *RedisClient) Psubscribe(ctx context.Context, patterns string, cb PSubscribeCallback) {
+	err := rc.PSubClient.PSubscribe(ctx, patterns)
+	if err != nil {
+		log.Logger.Fatal("call PSubscribe failed")
+	}
+
+	rc.cbMap[patterns] = cb
+}
+
+// ListenEvent 监听事件
+// 避免重复支付
+func (rc *RedisClient) ListenEvent(ctx context.Context) {
+	rc.PSubClient = *rc.Conn.PSubscribe(ctx)
+	rc.cbMap = make(map[string]PSubscribeCallback)
+
+	go func() {
+		for {
+			log.Logger.Info("waitting for event")
+			res, _ := rc.PSubClient.Receive(context.TODO())
+			switch s := res.(type) {
+			case *redis.Message:
+				fmt.Printf("got a event, call your callback now")
+				pattern := (*string)(unsafe.Pointer(&s.Pattern))
+				channel := (*string)(unsafe.Pointer(&s.Channel))
+				message := (*string)(unsafe.Pointer(&s.Payload))
+
+				fmt.Printf("target channel name: [%v]\n", channel)
+				rc.cbMap[*channel](*pattern, *channel, *message)
+			case redis.Subscription:
+				fmt.Printf("%s: %s %d\n", s.Channel, s.Kind, s.Count)
+			case error:
+				log.Logger.Fatal("error handler")
+				continue
+			default:
+				log.Logger.Error("the messsage is not matched")
+			}
+
+		}
+	}()
 }

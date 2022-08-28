@@ -8,8 +8,6 @@ import (
 	"time"
 	"unsafe"
 
-	// log "github.com/base/log"
-	// "github.com/gomodule/redigo/redis"
 	redis "github.com/go-redis/redis/v9"
 )
 

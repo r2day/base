@@ -66,7 +66,7 @@ func (i Amqp) Send(payload []byte) {
 	failOnError(err, "Failed to publish a message")
 }
 
-func (i Amqp) Reiceive(f func([]byte, string) []byte) {
+func (i Amqp) Reiceive(f func(string, string, []byte) []byte) {
 	msgs, err := i.Channel.Consume(
 		i.Queue.Name, // queue
 		"",           // consumer
@@ -82,8 +82,8 @@ func (i Amqp) Reiceive(f func([]byte, string) []byte) {
 
 	go func() {
 		for d := range msgs {
-			logger.Logger.Debugf("Received a message: %s | tag: %s", d.Body, d.ConsumerTag)
-			f(d.Body, d.ConsumerTag)
+			logger.Logger.Debugf("Received a message: %s  appId: %s | messageId: ", d.Body, d.AppId, d.MessageId)
+			f(d.AppId,d.MessageId, d.Body)
 		}
 	}()
 

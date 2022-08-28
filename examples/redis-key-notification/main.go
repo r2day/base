@@ -38,7 +38,7 @@ func (c *PSubscriber) PConnect(ctx context.Context, ip string, port uint16) {
 			res, _ := c.client.Receive(context.TODO())
 			switch s := res.(type) {
 			case *redis.Message:
-				fmt.Printf("got a event, call your callback now", )
+				fmt.Printf("got a event, call your callback now")
 				pattern := (*string)(unsafe.Pointer(&s.Pattern))
 				channel := (*string)(unsafe.Pointer(&s.Channel))
 				message := (*string)(unsafe.Pointer(&s.Payload))
@@ -53,7 +53,7 @@ func (c *PSubscriber) PConnect(ctx context.Context, ip string, port uint16) {
 			default:
 				fmt.Printf("nothing match: event=[%v]", s)
 			}
-			
+
 		}
 	}()
 

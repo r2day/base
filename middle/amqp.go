@@ -52,7 +52,7 @@ func (i Amqp) Close() {
 	i.Channel.Close()
 }
 
-func (i Amqp) Send(payload []byte) {
+func (i Amqp) Send(appId string, messageId string, payload []byte) {
 
 	err := i.Channel.Publish(
 		"",           // exchange
@@ -62,6 +62,8 @@ func (i Amqp) Send(payload []byte) {
 		amqp.Publishing{
 			ContentType: "text/plain",
 			Body:        payload,
+			AppId:       appId,
+			MessageId:   messageId,
 		})
 	failOnError(err, "Failed to publish a message")
 }
@@ -83,7 +85,7 @@ func (i Amqp) Reiceive(f func(string, string, []byte) []byte) {
 	go func() {
 		for d := range msgs {
 			logger.Logger.Debugf("Received a message: %s  appId: %s | messageId: ", d.Body, d.AppId, d.MessageId)
-			f(d.AppId,d.MessageId, d.Body)
+			f(d.AppId, d.MessageId, d.Body)
 		}
 	}()
 

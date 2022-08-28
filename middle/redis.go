@@ -20,7 +20,7 @@ const (
 	defaultDatabase = 0
 )
 
-type PSubscribeCallback func(c *redis.Client, pattern, channel, message string)
+type PSubscribeCallback func(c *redis.Client, pattern string, channel string, message string)
 
 type RedisClient struct {
 	Ctx        context.Context
@@ -32,9 +32,9 @@ type RedisClient struct {
 // InitRedis 初始化redis
 func InitRedis(ctx context.Context, dsn string, user string, password string, readTimeout time.Duration) RedisClient {
 	rdb := redis.NewClient(&redis.Options{
-		Addr:     dsn,
-		Password: password,        // no password set
-		DB:       defaultDatabase, // use default DB
+		Addr:        dsn,
+		Password:    password,        // no password set
+		DB:          defaultDatabase, // use default DB
 		ReadTimeout: readTimeout,
 	})
 	rc := RedisClient{
@@ -151,7 +151,7 @@ func (rc *RedisClient) ListenEvent(ctx context.Context) {
 				message := (*string)(unsafe.Pointer(&s.Payload))
 
 				fmt.Printf("target channel name: [%v]\n", channel)
-				rc.cbMap[*channel](*pattern, *channel, *message)
+				rc.cbMap[*channel](rc.Conn, *pattern, *channel, *message)
 			case redis.Subscription:
 				fmt.Printf("%s: %s %d\n", s.Channel, s.Kind, s.Count)
 			case error:

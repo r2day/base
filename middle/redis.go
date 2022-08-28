@@ -20,7 +20,7 @@ const (
 	defaultDatabase = 0
 )
 
-type PSubscribeCallback func(pattern, channel, message string)
+type PSubscribeCallback func(c *redis.Client, pattern, channel, message string)
 
 type RedisClient struct {
 	Ctx        context.Context

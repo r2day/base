@@ -30,11 +30,12 @@ type RedisClient struct {
 }
 
 // InitRedis 初始化redis
-func InitRedis(ctx context.Context, dsn string, user string, password string) RedisClient {
+func InitRedis(ctx context.Context, dsn string, user string, password string, readTimeout time.Duration) RedisClient {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     dsn,
 		Password: password,        // no password set
 		DB:       defaultDatabase, // use default DB
+		ReadTimeout: readTimeout,
 	})
 	rc := RedisClient{
 		Conn: rdb,
@@ -126,7 +127,7 @@ func (rc *RedisClient) DelOrderPlace(ctx context.Context, orderId string) {
 func (rc *RedisClient) Psubscribe(ctx context.Context, patterns string, cb PSubscribeCallback) {
 	err := rc.PSubClient.PSubscribe(ctx, patterns)
 	if err != nil {
-		log.Logger.Fatal("call PSubscribe failed")
+		log.Logger.Fatal(err)
 	}
 
 	rc.cbMap[patterns] = cb

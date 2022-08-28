@@ -101,6 +101,8 @@ func (rc *RedisClient) SetOrderPlace(ctx context.Context, orderId string) {
 	orderPlaceKey := fmt.Sprintf("%s_%s", enum.OrderPlaceTimeTTL, orderId)
 	minutes := btime.SecondsToMinutes(int(enum.DefaultOrderExpireTime.Seconds()))
 	rc.Conn.SetEx(ctx, orderPlaceKey, minutes, enum.DefaultOrderExpireTime)
+	orderPlaceKeyVal := fmt.Sprintf("%s_%s_val", enum.OrderPlaceTimeTTL, orderId)
+	rc.Conn.SetEx(ctx, orderPlaceKeyVal, orderId, enum.DefaultOrderExpireTime * 10) // 值会在10倍的时间到达后删除
 
 }
 

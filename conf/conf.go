@@ -33,6 +33,7 @@ type CosT struct {
 	SecretAccessKey string `yaml:"secretAccessKey"`
 	S3Region        string `yaml:"s3Region"`
 	S3Bucket        string `yaml:"s3Bucket"`
+	Endpoint        string `yaml:"endpoint"`
 }
 
 // Conf 配置

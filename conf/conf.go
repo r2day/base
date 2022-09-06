@@ -27,12 +27,22 @@ type ClientT struct {
 	// Data
 }
 
+// CosT 配置
+type CosT struct {
+	AccessKeyID     string `yaml:"accessKeyID"`
+	SecretAccessKey string `yaml:"secretAccessKey"`
+	S3Region        string `yaml:"s3Region"`
+	S3Bucket        string `yaml:"s3Bucket"`
+}
+
 // Conf 配置
 type ConfT struct {
 	// # 服务配置
 	Service ServiceT `yaml:"service"`
 	// # 客户端配置
 	Clients []*ClientT `yaml:"clients"`
+	// cos 配置
+	Cos CosT `yaml:"cos"`
 	// # 客户端配置map
 	clientMap map[string]*ClientT `yaml:"clients"`
 }

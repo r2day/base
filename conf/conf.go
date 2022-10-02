@@ -5,6 +5,7 @@ import (
 	"github.com/spf13/viper"
 )
 
+// ServiceT 服务配置
 type ServiceT struct {
 	// Name 服务名称
 	Name string
@@ -14,6 +15,8 @@ type ServiceT struct {
 	RunMode string
 	// 	AllowOrigin 允许的跨站请求
 	AllowOrigin string
+	// 	EndpointPrefix api前缀
+	EndpointPrefix string
 }
 
 // ClientT 客户端配置
@@ -51,7 +54,7 @@ type ConfT struct {
 // Conf 全局配置
 var Conf = &ConfT{}
 
-// InitConfig 初始化配置文件
+// InitConf 初始化配置文件
 func InitConf(configPath string) *ConfT {
 	viper.SetConfigType("yaml")
 	viper.SetConfigFile(configPath)
@@ -86,7 +89,7 @@ func (c *ConfT) initClientMap() {
 	}
 }
 
-// GetClient 获取客户端配置
+// Get 获取客户端配置
 func (c *ConfT) Get(name string) *ClientT {
 	val, ok := c.clientMap[name]
 	if !ok {

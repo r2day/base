@@ -39,7 +39,7 @@ type CosT struct {
 	Endpoint        string `yaml:"endpoint"`
 }
 
-// Conf 配置
+// ConfT 配置
 type ConfT struct {
 	// # 服务配置
 	Service ServiceT `yaml:"service"`

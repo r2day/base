@@ -82,3 +82,8 @@ func GetOrderId() string {
 func TransactionId() string {
 	return getId("TX")
 }
+
+// SmsCode 短信验证码
+func SmsCode() string {
+	return getId("R-")[:8]
+}

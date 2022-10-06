@@ -18,7 +18,7 @@ type CacheClient struct {
 }
 
 // InitCache 初始化redis
-func InitCache(ctx context.Context, dsn string, user string, password string, readTimeout time.Duration) RedisClient {
+func InitCache(ctx context.Context, dsn string, user string, password string, readTimeout time.Duration) CacheClient {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:        dsn,
 		Username:    user,
@@ -26,7 +26,7 @@ func InitCache(ctx context.Context, dsn string, user string, password string, re
 		DB:          defaultDatabase, // use default DB
 		ReadTimeout: readTimeout,
 	})
-	rc := RedisClient{
+	rc := CacheClient{
 		Conn: rdb,
 		Ctx:  ctx,
 	}

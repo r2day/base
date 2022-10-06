@@ -37,7 +37,7 @@ func InitCache(ctx context.Context, dsn string, user string, password string, re
 func (rc *CacheClient) SetSmsCode(phone string, code string) {
 
 	// 每天会使用日期作为key的一部分
-	finalKey := fmt.Sprintf("%s_%s_%s_%s", enum.SmsCode, btime.GetDaily(), phone)
+	finalKey := fmt.Sprintf("%s_%s_%s", enum.SmsCode, btime.GetDaily(), phone)
 	rc.Conn.SetEx(rc.Ctx, finalKey, code, enum.SmsCodeExpireTime) // 验证码有效期是5分钟 (1分钟后重发的验证码会覆盖旧的)
 
 }
@@ -45,7 +45,7 @@ func (rc *CacheClient) SetSmsCode(phone string, code string) {
 // CheckSmsCode 校验验证码是否正确
 func (rc *CacheClient) CheckSmsCode(phone string, code string) bool {
 	// 每天会使用日期作为key的一部分
-	finalKey := fmt.Sprintf("%s_%s_%s_%s", enum.SmsCode, btime.GetDaily(), phone)
+	finalKey := fmt.Sprintf("%s_%s_%s", enum.SmsCode, btime.GetDaily(), phone)
 	val, err := rc.Conn.Get(rc.Ctx, finalKey).Result()
 	if err != nil {
 		// panic(err)

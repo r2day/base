@@ -9,14 +9,16 @@ type CT struct {
 	ProcessFunc map[string]func([]byte) []byte
 }
 
-func NewConsumer() CT {
-	return CT{
+func NewConsumer() *CT {
+	return &CT{
 		ProcessFunc: make(map[string]func([]byte) []byte, 0),
 	}
 }
 
-func (p *CT) Register(name string, f func([]byte) []byte) {
-	p.ProcessFunc[name] = f
+func (p *CT) Register(appId string, f func([]byte) []byte) {
+	p.ProcessFunc[appId] = f
+	logger.Logger.Println("register new appId successful")
+
 }
 
 // Consumer 可以直接在xxx-consumer 类型使用

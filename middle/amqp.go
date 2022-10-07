@@ -68,7 +68,7 @@ func (i Amqp) Send(appId string, messageId string, payload []byte) {
 	failOnError(err, "Failed to publish a message")
 }
 
-func (i Amqp) Reiceive(f func(string, string, []byte) []byte) {
+func (i Amqp) Receive(f func(string, string, []byte) []byte) {
 	msgs, err := i.Channel.Consume(
 		i.Queue.Name, // queue
 		"",           // consumer

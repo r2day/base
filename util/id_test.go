@@ -20,3 +20,29 @@ func TestSmsCode(t *testing.T) {
 		})
 	}
 }
+
+func Test_getId(t *testing.T) {
+	type args struct {
+		prefix string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			"test",
+			args{
+				prefix: "R-",
+			},
+			"R-xx",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := getId(tt.args.prefix); got != tt.want {
+				t.Errorf("getId() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

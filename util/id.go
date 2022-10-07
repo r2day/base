@@ -85,5 +85,5 @@ func TransactionId() string {
 
 // SmsCode 短信验证码
 func SmsCode() string {
-	return getId("R-")[:8]
+	return "R-" + getId("")[13:]
 }

@@ -39,12 +39,20 @@ type CosT struct {
 	Endpoint        string `yaml:"endpoint"`
 }
 
-// ConfT 配置
-type ConfT struct {
+// CloudT 配置
+type CloudT struct {
+	SecretID  string `yaml:"secretId"`
+	SecretKey string `yaml:"secretKey"`
+}
+
+// Configuration 配置
+type Configuration struct {
 	// # 服务配置
 	Service ServiceT `yaml:"service"`
 	// # 客户端配置
 	Clients []*ClientT `yaml:"clients"`
+	// Cloud 云配置
+	Cloud CloudT `yaml:"cloud"`
 	// cos 配置
 	Cos CosT `yaml:"cos"`
 	// # 客户端配置map
@@ -52,10 +60,10 @@ type ConfT struct {
 }
 
 // Conf 全局配置
-var Conf = &ConfT{}
+var Conf = &Configuration{}
 
 // InitConf 初始化配置文件
-func InitConf(configPath string) *ConfT {
+func InitConf(configPath string) *Configuration {
 	viper.SetConfigType("yaml")
 	viper.SetConfigFile(configPath)
 
@@ -83,14 +91,14 @@ func InitConf(configPath string) *ConfT {
 }
 
 // InitClientMap 获取客户端配置
-func (c *ConfT) initClientMap() {
+func (c *Configuration) initClientMap() {
 	for _, v := range c.Clients {
 		c.clientMap[v.Name] = v
 	}
 }
 
 // Get 获取客户端配置
-func (c *ConfT) Get(name string) *ClientT {
+func (c *Configuration) Get(name string) *ClientT {
 	val, ok := c.clientMap[name]
 	if !ok {
 		return nil

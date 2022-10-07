@@ -27,7 +27,7 @@ func TestSendSms(t *testing.T) {
 				smsAppId:  "1400733090",
 				signName:  "我的程序员之路个人网",
 				tplId:     "1564505",
-				params:    []string{"123123", "20"},
+				params:    []string{"G-123123", "20"},
 				phoneList: []string{"17666116392"},
 			},
 		},

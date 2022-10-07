@@ -84,7 +84,7 @@ func (i Amqp) Receive(f func(string, string, []byte) []byte) {
 
 	go func() {
 		for d := range msgs {
-			logger.Logger.Debugf("Received a message: %s  appId: %s | messageId: ", d.Body, d.AppId, d.MessageId)
+			logger.Logger.Debugf("Received a message: %s  appId: %s | messageId: %s", d.Body, d.AppId, d.MessageId)
 			f(d.AppId, d.MessageId, d.Body)
 		}
 	}()

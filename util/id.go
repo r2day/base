@@ -117,5 +117,7 @@ func SessionId() string {
 
 // ApplyId 申请回执
 func ApplyId() string {
-	return getId("")
+	s := getId("")
+	short := s[8:]
+	return short
 }

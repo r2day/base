@@ -109,3 +109,13 @@ func MerchantId() string {
 func MerchantKey() string {
 	return ConvertToToken(getId("MX"))
 }
+
+// SessionId 通用session
+func SessionId() string {
+	return ConvertToToken(getId("SESSION"))
+}
+
+// ApplyId 申请回执
+func ApplyId() string {
+	return getId("")
+}

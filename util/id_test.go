@@ -72,3 +72,22 @@ func TestConvertToToken(t *testing.T) {
 		})
 	}
 }
+
+func TestApplyId(t *testing.T) {
+	tests := []struct {
+		name string
+		want string
+	}{
+		{
+			"test",
+			"",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ApplyId(); got != tt.want {
+				t.Errorf("ApplyId() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -45,6 +45,17 @@ type CloudT struct {
 	SecretKey string `yaml:"secretKey"`
 }
 
+// SmsT 短信配置
+type SmsT struct {
+	Name string `yaml:"name"`
+	// 短信应用id
+	AppID string `yaml:"appId"`
+	// 签名-名称
+	SignName string `yaml:"signName"`
+	// 模版id
+	TplId string `yaml:"tplId"`
+}
+
 // Configuration 配置
 type Configuration struct {
 	// # 服务配置
@@ -55,8 +66,14 @@ type Configuration struct {
 	Cloud CloudT `yaml:"cloud"`
 	// cos 配置
 	Cos CosT `yaml:"cos"`
+	// # 客户端配置
+	Sms []*SmsT `yaml:"sms"`
+
 	// # 客户端配置map
-	clientMap map[string]*ClientT `yaml:"clients"`
+	clientMap map[string]*ClientT `yaml:"clients_map"`
+
+	// # 短信配置map
+	smsMap map[string]*SmsT `yaml:"sms_map"`
 }
 
 // Conf 全局配置
@@ -85,8 +102,14 @@ func InitConf(configPath string) *Configuration {
 			panic(err)
 		}
 	})
+
+	// 将配置名称映射到配置上
 	Conf.clientMap = make(map[string]*ClientT, 0)
 	Conf.initClientMap()
+
+	Conf.smsMap = make(map[string]*SmsT, 0)
+	Conf.initSmsMap()
+
 	return Conf
 }
 
@@ -97,9 +120,25 @@ func (c *Configuration) initClientMap() {
 	}
 }
 
+// initSmsMap 初始化短信配置
+func (c *Configuration) initSmsMap() {
+	for _, v := range c.Sms {
+		c.smsMap[v.Name] = v
+	}
+}
+
 // Get 获取客户端配置
 func (c *Configuration) Get(name string) *ClientT {
 	val, ok := c.clientMap[name]
+	if !ok {
+		return nil
+	}
+	return val
+}
+
+// GetSms 获取短信配置
+func (c *Configuration) GetSms(name string) *SmsT {
+	val, ok := c.smsMap[name]
 	if !ok {
 		return nil
 	}

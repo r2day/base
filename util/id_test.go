@@ -46,3 +46,29 @@ func Test_getId(t *testing.T) {
 		})
 	}
 }
+
+func TestConvertToToken(t *testing.T) {
+	type args struct {
+		k string
+	}
+	tests := []struct {
+		name string
+		args args
+		want string
+	}{
+		{
+			"test",
+			args{
+				"hello",
+			},
+			"5d41402abc4b2a76b9719d911017c592",
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := ConvertToToken(tt.args.k); got != tt.want {
+				t.Errorf("ConvertToToken() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

@@ -1,8 +1,9 @@
 package util
 
 import (
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
-
 	"github.com/bwmarrin/snowflake"
 )
 
@@ -16,6 +17,17 @@ func getId(prefix string) string {
 	// Generate a snowflake ID.
 	id := node.Generate()
 	return fmt.Sprintf("%s%d", prefix, id)
+}
+
+func getMD5Hash(text string) string {
+	hash := md5.Sum([]byte(text))
+	return hex.EncodeToString(hash[:])
+}
+
+// ConvertToToken 转换为md5格式
+func ConvertToToken(k string) string {
+	token := getMD5Hash(k)
+	return token
 }
 
 // GetBrandId 获取品牌id
@@ -86,4 +98,14 @@ func TransactionId() string {
 // SmsCode 短信验证码
 func SmsCode() string {
 	return "R-" + getId("")[13:]
+}
+
+// MerchantId 交易id
+func MerchantId() string {
+	return getId("M")
+}
+
+// MerchantKey 交易id
+func MerchantKey() string {
+	return ConvertToToken(getId("MX"))
 }

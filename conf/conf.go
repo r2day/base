@@ -17,6 +17,8 @@ type ServiceT struct {
 	AllowOrigin string
 	// 	EndpointPrefix api前缀
 	EndpointPrefix string
+	// 	SecretKey api 加密/登录加密
+	SecretKey string
 }
 
 // ClientT 客户端配置

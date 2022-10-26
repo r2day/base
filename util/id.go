@@ -121,3 +121,10 @@ func ApplyId() string {
 	short := s[8:]
 	return short
 }
+
+// InitPassword 初始密码
+func InitPassword() string {
+	s := getId("")
+	short := s[8:]
+	return short
+}

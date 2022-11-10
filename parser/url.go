@@ -2,6 +2,7 @@ package parser
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -50,12 +51,12 @@ func ParserParams(c *gin.Context) UrlParams {
 	params.Offset = defaultOffset
 
 	if len(rangeValue) == 1 {
-		//println("rangeValue-->", rangeValue[0], ok)
+		println("rangeValue-->", rangeValue[0], ok)
 		rangeObj := make([]int, 2)
 		err := json.Unmarshal([]byte(rangeValue[0]), &rangeObj)
 
 		if err != nil {
-			//fmt.Println("json.Unmarshal failed-->", err)
+			fmt.Println("json.Unmarshal failed-->", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return params
 		}
@@ -78,7 +79,10 @@ func ParserParams(c *gin.Context) UrlParams {
 			return params
 		}
 
-		if filterInstance.Status == "" {
+		// 检查如果所有过滤字段都没有被解析到那么
+		// 直接返回
+		if filterInstance.Status == "" &&
+			filterInstance.CategoryId == 0 {
 			return params
 		}
 		params.HasFilter = true

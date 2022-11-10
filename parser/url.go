@@ -12,6 +12,10 @@ const (
 	defaultLimit  = 24
 )
 
+const (
+	OnePage = 1
+)
+
 // QueryRequest Binding from JSON
 type QueryRequest struct {
 	// FilterRequest 过滤器

@@ -2,7 +2,6 @@ package parser
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -29,6 +28,9 @@ type FilterRequest struct {
 
 	// Status 状态
 	Status string `form:"status" json:"status" xml:"status"`
+
+	// CategoryId 状态
+	CategoryId string `form:"category_id" json:"category_id" xml:"category_id"`
 }
 
 // UrlParams 将url的参数统一进行解析
@@ -48,12 +50,12 @@ func ParserParams(c *gin.Context) UrlParams {
 	params.Offset = defaultOffset
 
 	if len(rangeValue) == 1 {
-		println("rangeValue-->", rangeValue[0], ok)
+		//println("rangeValue-->", rangeValue[0], ok)
 		rangeObj := make([]int, 2)
 		err := json.Unmarshal([]byte(rangeValue[0]), &rangeObj)
 
 		if err != nil {
-			fmt.Println("json.Unmarshal failed-->", err)
+			//fmt.Println("json.Unmarshal failed-->", err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return params
 		}
@@ -66,6 +68,8 @@ func ParserParams(c *gin.Context) UrlParams {
 
 	if ok && len(filter) != 0 {
 
+		// 将过滤器中的所有参数都解析出来供
+		// 业务查询进行使用
 		filterInstance := FilterRequest{}
 
 		err := json.Unmarshal([]byte(filter[0]), &filterInstance)

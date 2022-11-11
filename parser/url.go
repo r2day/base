@@ -30,8 +30,11 @@ type FilterRequest struct {
 	// Status 状态
 	Status string `form:"status" json:"status" xml:"status"`
 
-	// CategoryId 状态
+	// CategoryId 分类id
 	CategoryId uint `form:"category_id" json:"category_id" xml:"category_id"`
+
+	// ProductId 商品id
+	ProductId uint `form:"product_id" json:"product_id" xml:"product_id"`
 }
 
 // UrlParams 将url的参数统一进行解析

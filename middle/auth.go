@@ -1,7 +1,6 @@
 package middle
 
 import (
-	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
@@ -83,8 +82,7 @@ func CORSMiddleware() gin.HandlerFunc {
 func AuthMiddleware(key string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("jwt")
-		if err != nil {
-			fmt.Println("the cookie is not found ->", err)
+		if cookie == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
@@ -94,7 +92,6 @@ func AuthMiddleware(key string) gin.HandlerFunc {
 		})
 
 		if err != nil {
-			fmt.Println("the -err->", err)
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
 		}
@@ -103,5 +100,4 @@ func AuthMiddleware(key string) gin.HandlerFunc {
 		c.Request.Header.Set("MerchantId", claims.Issuer)
 		c.Next()
 	}
-
 }

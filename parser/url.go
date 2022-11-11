@@ -85,7 +85,8 @@ func ParserParams(c *gin.Context) UrlParams {
 		// 检查如果所有过滤字段都没有被解析到那么
 		// 直接返回
 		if filterInstance.Status == "" &&
-			filterInstance.CategoryId == 0 {
+			filterInstance.CategoryId == 0 &&
+			filterInstance.ProductId == 0 {
 			return params
 		}
 		params.HasFilter = true

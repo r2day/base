@@ -1,9 +1,10 @@
 package middle
 
 import (
-	"github.com/dgrijalva/jwt-go"
 	"net/http"
 	"time"
+
+	"github.com/dgrijalva/jwt-go"
 
 	"github.com/gin-gonic/gin"
 	"github.com/r2day/base/conf"
@@ -82,6 +83,11 @@ func CORSMiddleware() gin.HandlerFunc {
 func AuthMiddleware(key string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		cookie, err := c.Cookie("jwt")
+		if err != nil {
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+
 		if cookie == "" {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			return
@@ -98,8 +104,13 @@ func AuthMiddleware(key string) gin.HandlerFunc {
 
 		claims := token.Claims.(*jwt.StandardClaims)
 		// 解析出账号信息
-		
-		c.Request.Header.Set("MerchantId", claims.Issuer)
+
+		loginInfo := LoadLoginInfo(claims.Issuer)
+
+
+		c.Request.Header.Set("MerchantId", loginInfo.Namespace)
+		c.Request.Header.Set("AccountId", loginInfo.User)
+		c.Request.Header.Set("Avatar", loginInfo.Avatar)
 		c.Next()
 	}
 }

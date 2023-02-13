@@ -97,6 +97,8 @@ func AuthMiddleware(key string) gin.HandlerFunc {
 		}
 
 		claims := token.Claims.(*jwt.StandardClaims)
+		// 解析出账号信息
+		
 		c.Request.Header.Set("MerchantId", claims.Issuer)
 		c.Next()
 	}
